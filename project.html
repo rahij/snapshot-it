@@ -35,7 +35,7 @@
       render_commits();
     });
     $("#commit-button").click(function(){
-      exec("git diff HEAD", {cwd: global.current_repo_path}, function(error, stdout, stderr){
+      exec("git add . && git diff HEAD", {cwd: global.current_repo_path}, function(error, stdout, stderr){
         if(stdout.replace(/^\s+|\s+$/g, '') == ""){
           alert("No changes to save!");
           return false;
