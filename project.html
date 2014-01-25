@@ -1,9 +1,27 @@
+<div id="commit-message-modal" tabindex="-1" role="dialog" aria-labelledby="name-modal-label" aria-hidden="true" class="modal fade">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" data-dismiss="modal" aria-hidden="true" class="close">×</button>
+        <h4 id="name-modal-label" class="modal-title">Commit</h4>
+      </div>
+      <div class="modal-body">
+        <form id="commit-message-form">Enter a description for your changes
+          <input id="commit-message" type="text"/>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button id="commit-message-button" type="button" class="btn btn-primary">Ok</button>
+      </div>
+    </div>
+  </div>
+</div>
+
 <div class="well" id="action-bar">
   <ul class="nav nav-list">
     <li class="nav-header">ACTIONS</li>
-    <li class="active"><button class="btn btn-primary" id="commit-button">Save this version</button></li>
+    <li class="active"><button class="btn btn-primary" id="commit-button">Save current version</button></li>
     <li class="active"><button class="btn btn-primary" id="log-button">Past Versions</button></li>
-    <li class="active"><button class="btn btn-primary">Branch</button></li>
   </ul>
 </div>
 
@@ -14,17 +32,61 @@
 <script type="text/javascript">
   $("document").ready(function(){
     $("#log-button").click(function(){
-      global.current_repo.commits(function(err, commits) {
-        console.log(commits);
-        $("#display_area").html(format_commits({"commits" : commits}));
+      render_commits();
+    });
+    $("#commit-button").click(function(){
+      exec("git diff HEAD", {cwd: global.current_repo_path}, function(error, stdout, stderr){
+        if(stdout.replace(/^\s+|\s+$/g, '') == ""){
+          alert("No changes to save!");
+          return false;
+        }
+        else
+          $('#commit-message-modal').modal();
       });
     });
     $("body").on('click', '.revert-button', function(){
-      $(".revert-button").click(function(){
-        global.current_repo.checkout($(this).attr("data-id"), function(res){
-          console.log(res);
+      global.current_repo.checkout($(this).attr("data-id"), function(res){
+        exec("git diff", {cwd: global.current_repo_path}, function(error, stdout, stderr){
+          if(stdout.replace(/\n/g, '<br />') != "")
+            alert("You have unsaved changes. Please click save and then try reverting again.");
+          else
+            render_commits();
         });
       });
+    });
+    $("body").on('click', '.diff-button', function(){
+      exec("git diff "+$(this).attr('data-id')+"^!", {cwd: global.current_repo_path}, function(error, stdout, stderr){
+        diff = stdout.replace(/\n/g, '<br />');
+        alert(diff);
+      });
+    });
+
+    $("#commit-message-button").click(function(){
+      $("#commit-message-form").submit();
+    });
+
+    $("#commit-message-form").submit(function(){
+      global.current_repo.add(".", function(err){
+        if($("#commit-message").val().trim() == "")
+          return false;
+        else{
+          $("#commit-message-modal").modal('hide');
+          global.current_repo.commit($("#commit-message").val().trim(), function(err, commits) {
+            bash = "git symbolic-ref --short -q HEAD";
+            exec(bash, {cwd: global.current_repo_path}, function(error, stdout, stderr){
+              if(stdout.replace(/^\s+|\s+$/g, '') == ""){
+                exec("git checkout -b test_branch && git branch -m master old-master && git branch -m test_branch master && git branch -D old-master", {cwd: global.current_repo_path}, function(error, stdout, stderr){
+                  render_commits();
+                });
+              }
+              else{
+                render_commits();
+              }
+            });
+          });
+        }
+      });
+      return false;
     });
   });
 </script>
