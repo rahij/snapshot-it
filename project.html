@@ -22,6 +22,7 @@
     <li class="nav-header">ACTIONS</li>
     <li class="active"><button class="btn btn-primary" id="commit-button">Save current version</button></li>
     <li class="active"><button class="btn btn-primary" id="log-button">Past Versions</button></li>
+    <li class="active"><button class="btn btn-primary" id="list-button">Files</button></li>
   </ul>
 </div>
 
@@ -53,6 +54,10 @@
             render_commits();
         });
       });
+    });
+
+    $("body").on('click', '#list-button', function(){
+      global.folder.open(global.current_repo_path);
     });
 
     $("#commit-message-button").click(function(){

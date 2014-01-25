@@ -13,12 +13,13 @@ exec = require('child_process').exec;
 global.current_repo_path = "";
 global.current_repo = null;
 global.current_rev  = "";
+global.folder = null;
 
 $(document).ready(function() {
   $(".navbutton").click(function(){
     $("#main-container").load($(this).attr('href'), function(){
-      var folder = new folder_view.Folder($('#display_area'));
-      folder.open(global.current_repo_path);
+      global.folder = new folder_view.Folder($('#display_area'));
+      global.folder.open(global.current_repo_path);
       fs.readdir(global.current_repo_path, function(error, files) {
         if (error) {
           console.log(error);
@@ -35,17 +36,22 @@ $(document).ready(function() {
         if(flag == 0){
           git.init(global.current_repo_path, function(err, _repo) {
             alert("Your project has succesfully been created!");
-            var repo;
-            return repo = _repo;
+            global.current_repo = git(global.current_repo_path);
+            global.current_repo.add(".", function(err){
+              global.current_repo.commit("first draft", function(err, commits) {
+                var repo;
+                return repo = _repo;
+              });
+            });
           });
         }
         else{
           global.current_repo = git(global.current_repo_path);
         }
       });
-      folder.on('navigate', function(dir, mime) {
+      global.folder.on('navigate', function(dir, mime) {
         if (mime.type == 'folder') {
-          folder.open(mime);
+          global.folder.open(mime);
         } else {
           shell.openItem(mime.path);
         }
