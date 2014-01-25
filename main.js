@@ -14,12 +14,12 @@ global.current_repo_path = "";
 global.current_repo = null;
 global.current_rev  = "";
 global.folder = null;
+global.selected_commit = "";
 
 $(document).ready(function() {
   $(".navbutton").click(function(){
     $("#main-container").load($(this).attr('href'), function(){
       global.folder = new folder_view.Folder($('#display_area'));
-      global.folder.open(global.current_repo_path);
       fs.readdir(global.current_repo_path, function(error, files) {
         if (error) {
           console.log(error);
@@ -39,6 +39,7 @@ $(document).ready(function() {
             global.current_repo = git(global.current_repo_path);
             global.current_repo.add(".", function(err){
               global.current_repo.commit("first draft", function(err, commits) {
+                render_commits();
                 var repo;
                 return repo = _repo;
               });
@@ -47,11 +48,12 @@ $(document).ready(function() {
         }
         else{
           global.current_repo = git(global.current_repo_path);
+          render_commits();
         }
       });
       global.folder.on('navigate', function(dir, mime) {
         if (mime.type == 'folder') {
-          global.folder.open(mime);
+          global.folder.open(dir);
         } else {
           shell.openItem(mime.path);
         }
@@ -66,29 +68,24 @@ $(document).ready(function() {
 });
 
 var format_commits = jade.compile([
-    'a#unsaved-changes-button(data-toggle="collapse", data-target="#diff") Unsaved Changes',
-    '#diff.collapse.out !{commits.diff}',
+    'a#unsaved-changes-button(data-toggle="collapse", data-target="#diff") Uncaptured Changes&nbsp;&nbsp;',
+    ' i.icon-chevron-down',
+    '#diff.collapse.in !{commits.diff}',
     '#commits',
     '- each commit in commits',
-    '   .commit',
+    '   .commit(id="#{commit.id}", data-desc="#{commit.message}")',
     '     span.commit-desc #{commit.message}',
     '     if commits.head == commit.id',
     '       span.label.label-success Current Version',
-    '     .help-buttons-wrapper',
-    '       button.diff-button.btn.btn-primary(data-target="##{commit.id}", data-toggle="collapse") Click to view changes',
-    '       button.revert-button.btn.btn-danger(data-id="#{commit.id}") Revert to this version',
-    '     .diff-wrapper.collapse.out(id="#{commit.id}")'
   ].join('\n'));
 
-function fetch_diffs(commits, index){
-  commit_id = commits[index].id;
-  exec("git diff "+commit_id+"^!", {cwd: global.current_repo_path}, function(error, stdout, stderr){
-    diff = stdout.replace(/\n/g, '<br />');
-    $("#"+commit_id).html(diff)
-    if(index+1 < commits.length)
-      fetch_diffs(commits, index+1);
-  });
-}
+var generate_commit_details = jade.compile([
+    'button.revert-button.btn.btn-danger.btn-large.btn-block(data-id="#{commit_id}") Jump to this version',
+    '#commit-od-wrapper',
+    ' h3.commit-desc-panel #{commit_message}',
+    ' h5.side-panel-header Changes',
+    ' #commit-diff !{diff}'
+  ].join('\n'));
 
 function render_commits(){
   global.current_repo.commits(function(err, commits) {
@@ -100,7 +97,9 @@ function render_commits(){
         commits['diff'] = stdout.replace(/\n/g, '<br />');
         commits['diff'] = commits['diff'] == "" ? "No changes" : commits['diff'];
         $("#display_area").html(format_commits({"commits" : commits}));
-        fetch_diffs(commits, 0);
+        if(global.selected_commit == "")
+          global.selected_commit = $(".commit").first().attr('id');
+        $("#"+global.selected_commit).click();
       });
     });
   });

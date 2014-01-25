@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>Version Control</title>
+<title>Snapshot Files</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <link href="bootstrap/css/bootstrap.css" rel="stylesheet">
 <link href="style.css" rel="stylesheet">
@@ -22,21 +22,12 @@
 </head>
 <body>
 <div style="" id="main-container">
-  <div class="well" id="action-bar">
-    <ul class="nav nav-list">
-      <li class="nav-header">ACTIONS</li>
-      <li class="active"><button href="project.html" class="btn btn-primary quit-button">Exit</button></li>
-    </ul>
-  </div>
-
-  <div class="row" id="main-view">
-    <form id="create-project-form">
-      <label>Choose an existing project ot create a new one</label>
-      <input id="fileDialog" type="file" size="60" nwdirectory/>
-      <div>
-        <button href="project.html" id="project-button" class="btn btn-primary btn-block navbutton">Submit</button>
-    </form>
-  </div>
+  <form id="create-project-form">
+    <label>Choose an existing project ot create a new one</label>
+    <input id="fileDialog" type="file" size="60" nwdirectory/>
+    <div>
+      <button href="project.html" id="project-button" class="btn btn-primary btn-block navbutton">Submit</button>
+  </form>
 </div>
 </body>
 </html>
