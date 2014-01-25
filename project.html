@@ -1,0 +1,30 @@
+<div class="well" id="action-bar">
+  <ul class="nav nav-list">
+    <li class="nav-header">ACTIONS</li>
+    <li class="active"><button class="btn btn-primary" id="commit-button">Save this version</button></li>
+    <li class="active"><button class="btn btn-primary" id="log-button">Past Versions</button></li>
+    <li class="active"><button class="btn btn-primary">Branch</button></li>
+  </ul>
+</div>
+
+<div class="row" id="main-view">
+  <div id="display_area"></div>
+</div>
+
+<script type="text/javascript">
+  $("document").ready(function(){
+    $("#log-button").click(function(){
+      global.current_repo.commits(function(err, commits) {
+        console.log(commits);
+        $("#display_area").html(format_commits({"commits" : commits}));
+      });
+    });
+    $("body").on('click', '.revert-button', function(){
+      $(".revert-button").click(function(){
+        global.current_repo.checkout($(this).attr("data-id"), function(res){
+          console.log(res);
+        });
+      });
+    });
+  });
+</script>

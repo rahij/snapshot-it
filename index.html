@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Version Control</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link href="bootstrap/css/bootstrap.css" rel="stylesheet">
+<link href="style.css" rel="stylesheet">
+<script type="text/javascript" src="js/jquery-1.7.2.js"></script>
+<script type="text/javascript" src="bootstrap/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="main.js"></script>
+<script type="text/javascript">
+  $("document").ready(function(){
+    function chooseFile(name) {
+      var chooser = $(name);
+      chooser.change(function(evt) {
+        global.current_repo_path = $(this).val();
+      });
+    }
+    chooseFile('#fileDialog');
+  });
+</script>
+</head>
+<body>
+<div style="" id="main-container">
+  <div class="well" id="action-bar">
+    <ul class="nav nav-list">
+      <li class="nav-header">ACTIONS</li>
+      <li class="active"><button href="project.html" class="btn btn-primary quit-button">Exit</button></li>
+    </ul>
+  </div>
+
+  <div class="row" id="main-view">
+    <form id="create-project-form">
+      Choose an existing project ot create a new one<input id="fileDialog" type="file" nwdirectory/>
+      <button href="project.html" class="btn btn-primary navbutton">Open folder</button>
+    </form>
+  </div>
+</div>
+</body>
+</html>

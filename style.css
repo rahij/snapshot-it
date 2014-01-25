@@ -1,0 +1,92 @@
+* {
+  -webkit-user-select: none;
+}
+
+body {
+  background-image: url('images/htmlbg.png');
+  width: 1000px;
+  height: 500px;
+  background-size: 100% 100%;
+}
+
+#main-container{
+  width: 100%;
+  height: 100%;
+}
+
+#action-bar{
+  float: left;
+  width: 30%;
+  padding: 8px;
+}
+
+#main-view{
+  background: #FFF;
+  -webkit-border-radius: 2px;
+  height: 100%;
+  overflow: auto;
+  width: 65%;
+  float: left;
+  margin-left: 11px;
+}
+
+#action-bar li{
+  margin: 5px;
+}
+
+#action-bar li button{
+  width: 200px;
+}
+
+#create-project-form{
+  margin-top: 20px;
+  margin-left: 20px;
+}
+
+#create-project-form input{
+  display: block;
+}
+
+#display_area{
+  width: 300px;
+  height: 300px;
+}
+
+.files {
+  padding: 0;
+  margin: 0;
+}
+
+.file {
+  padding: 2px;
+  margin: 2px;
+  width: 80px;
+  display: inline-block;
+
+  text-align: center;
+  vertical-align: top;
+}
+
+.file.focus {
+  background-color: #08C;
+  -webkit-border-radius: 4px;
+}
+
+.file .name {
+  width: 80px;
+  word-wrap: break-word;
+}
+
+.file.focus .name {
+  color: white;
+}
+
+.file .icon {
+  margin: auto;
+  margin-top: 0;
+  width: 60px;
+}
+
+.file.focus .icon {
+  -webkit-filter: invert(20%);
+}
