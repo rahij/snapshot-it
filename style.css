@@ -97,9 +97,13 @@ body {
   width: 100%;
 }
 
-.commit{
+.commit, #diff{
   border-bottom: 1px solid gray;
   padding: 5px;
+}
+
+#unsaved-changes-button{
+  cursor: pointer;
 }
 
 .commit-desc{

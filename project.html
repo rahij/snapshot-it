@@ -35,7 +35,7 @@
       render_commits();
     });
     $("#commit-button").click(function(){
-      exec("git add . && git diff HEAD", {cwd: global.current_repo_path}, function(error, stdout, stderr){
+      exec("git add . --all && git diff HEAD", {cwd: global.current_repo_path}, function(error, stdout, stderr){
         if(stdout.replace(/^\s+|\s+$/g, '') == ""){
           alert("No changes to save!");
           return false;
@@ -54,19 +54,13 @@
         });
       });
     });
-    $("body").on('click', '.diff-button', function(){
-      exec("git diff "+$(this).attr('data-id')+"^!", {cwd: global.current_repo_path}, function(error, stdout, stderr){
-        diff = stdout.replace(/\n/g, '<br />');
-        alert(diff);
-      });
-    });
 
     $("#commit-message-button").click(function(){
       $("#commit-message-form").submit();
     });
 
     $("#commit-message-form").submit(function(){
-      global.current_repo.add(".", function(err){
+      global.current_repo.add(". --all", function(err){
         if($("#commit-message").val().trim() == "")
           return false;
         else{

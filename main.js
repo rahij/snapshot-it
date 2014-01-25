@@ -60,8 +60,8 @@ $(document).ready(function() {
 });
 
 var format_commits = jade.compile([
-    'h5 Unsaved Changes',
-    // '#diff !{commits.diff}',
+    'a#unsaved-changes-button(data-toggle="collapse", data-target="#diff") Unsaved Changes',
+    '#diff.collapse.out !{commits.diff}',
     '#commits',
     '- each commit in commits',
     '   .commit',
@@ -69,9 +69,20 @@ var format_commits = jade.compile([
     '     if commits.head == commit.id',
     '       span.label.label-success Current Version',
     '     .help-buttons-wrapper',
-    '       button.diff-button.btn.btn-primary(data-id="#{commit.id}") Click to view changes',
-    '       button.revert-button.btn.btn-danger(data-id="#{commit.id}") Revert to this version'
+    '       button.diff-button.btn.btn-primary(data-target="##{commit.id}", data-toggle="collapse") Click to view changes',
+    '       button.revert-button.btn.btn-danger(data-id="#{commit.id}") Revert to this version',
+    '     .diff-wrapper.collapse.out(id="#{commit.id}")'
   ].join('\n'));
+
+function fetch_diffs(commits, index){
+  commit_id = commits[index].id;
+  exec("git diff "+commit_id+"^!", {cwd: global.current_repo_path}, function(error, stdout, stderr){
+    diff = stdout.replace(/\n/g, '<br />');
+    $("#"+commit_id).html(diff)
+    if(index+1 < commits.length)
+      fetch_diffs(commits, index+1);
+  });
+}
 
 function render_commits(){
   global.current_repo.commits(function(err, commits) {
@@ -79,9 +90,11 @@ function render_commits(){
     exec(bash, {cwd: global.current_repo_path}, function(error, stdout, stderr){
       global.current_rev  = stdout.replace(/^\s+|\s+$/g, '');
       commits['head'] = global.current_rev;
-      exec("git diff", {cwd: global.current_repo_path}, function(error, stdout, stderr){
-        commits['diff'] = stdout.replace(/\n/g, '<br />');;
+      exec("git diff HEAD", {cwd: global.current_repo_path}, function(error, stdout, stderr){
+        commits['diff'] = stdout.replace(/\n/g, '<br />');
+        commits['diff'] = commits['diff'] == "" ? "No changes" : commits['diff'];
         $("#display_area").html(format_commits({"commits" : commits}));
+        fetch_diffs(commits, 0);
       });
     });
   });
