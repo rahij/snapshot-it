@@ -12,13 +12,11 @@ To run:
 [https://github.com/rogerwang/node-webkit/wiki/How-to-run-apps][2]`https://github.com/rogerwang/node-webkit/wiki/How-to-run-apps`
 
 Screenshots:
-<img src="http://imgur.com/LsM6quZ.png" style="width: 300px" />
+<img src="http://imgur.com/QszLh0o.png" style="width: 300px" />
 
-<img src="http://imgur.com/KdLmJN4.png" style="width: 300px" />
+<img src="http://imgur.com/YRR14Qk.png" style="width: 300px" />
 
-<img src="http://imgur.com/bB3fsDJ.png" style="width: 300px" />
-
-<img src="http://imgur.com/iCYxXJ5.png" style="width: 300px" />
+<img src="http://imgur.com/UZlGfJ4.png" style="width: 300px" />
 
 
 
