@@ -58,8 +58,8 @@
       });
     });
     $("body").on('click', '.commit', function(){
-      $(".commit").removeClass('commit-selected');
-      $(this).addClass('commit-selected');
+      $(".commit").removeClass('active');
+      $(this).addClass('active');
       commit_id = $(this).attr('id');
       commit_message = $(this).attr('data-desc');
       global.selected_commit = commit_id;

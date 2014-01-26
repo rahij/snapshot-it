@@ -111,15 +111,15 @@ i{
 }
 
 .commit{
-  border-bottom: 1px solid gray;
-  padding: 15px;
+  /*border-bottom: 1px solid gray;
+  border-left: 1px solid gray;
+  border-right: 1px solid gray;*/
+  padding: 8px;
   cursor: pointer;
+  width: 95%;
+  margin-bottom: 5px;
+  text-align: left !important;
 }
-
-.commit:hover, .commit.commit-selected{
-  background-color: #d3d3d3;
-}
-
 .revert-button{
   width: 100%;
   margin-bottom: 20px;
@@ -132,7 +132,6 @@ i{
 .commit-desc-panel{
   font-size: 24px;
   color: gray;
-  text-align: center;
   padding-bottom: 10px;
 }
 
@@ -142,7 +141,7 @@ i{
 
 #diff{
   border-bottom: 1px solid gray;
-  padding: 15px;
+  margin: 10px;
   background-color: #909090;
   color: #fff;
 }
@@ -154,6 +153,7 @@ i{
 .commit-desc{
   font-size: 15px;
   padding-right: 10px;
+  padding-left: 10px;
 }
 
 .help-buttons-wrapper button{
