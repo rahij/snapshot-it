@@ -34,17 +34,23 @@ $(document).ready(function() {
             flag = 1;
         }
         if(flag == 0){
-          git.init(global.current_repo_path, function(err, _repo) {
-            alert("Your project has succesfully been created!");
-            global.current_repo = git(global.current_repo_path);
-            global.current_repo.add(".", function(err){
-              global.current_repo.commit("first draft", function(err, commits) {
-                render_commits();
-                var repo;
-                return repo = _repo;
+          if(files.length == 0){
+            alert("The folder is empty. Please add atleast one file in the folder and try again");
+             gui.App.quit();
+          }
+          else{
+            git.init(global.current_repo_path, function(err, _repo) {
+              alert("Your project has succesfully been created!");
+              global.current_repo = git(global.current_repo_path);
+              global.current_repo.add(".", function(err){
+                exec('git commit -m \"first draft\"', {cwd: global.current_repo_path}, function(error, stdout, stderr){
+                  render_commits();
+                  var repo;
+                  return repo = _repo;
+                });
               });
             });
-          });
+          }
         }
         else{
           global.current_repo = git(global.current_repo_path);

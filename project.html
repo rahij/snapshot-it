@@ -93,7 +93,7 @@
           return false;
         else{
           $("#commit-message-modal").modal('hide');
-          global.current_repo.commit($("#commit-message").val().trim(), function(err, commits) {
+          exec('git commit -m \"' + $("#commit-message").val().trim() +'\"', {cwd: global.current_repo_path}, function(error, stdout, stderr){
             bash = "git symbolic-ref --short -q HEAD";
             exec(bash, {cwd: global.current_repo_path}, function(error, stdout, stderr){
               if(stdout.replace(/^\s+|\s+$/g, '') == ""){
