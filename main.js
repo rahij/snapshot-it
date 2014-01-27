@@ -68,7 +68,7 @@ $(document).ready(function() {
 });
 
 var format_commits = jade.compile([
-    'a#unsaved-changes-button(data-toggle="collapse", data-target="#diff") Uncaptured Changes&nbsp;&nbsp;',
+    'a#unsaved-changes-button(data-toggle="collapse", data-target="#diff") Uncaptured File Changes&nbsp;&nbsp;',
     ' i.icon-chevron-down',
     '#diff.collapse.in !{commits.diff}',
     'h4 Recent Snapshots',
@@ -77,7 +77,7 @@ var format_commits = jade.compile([
     ' - var d = new Date(1000 * +commit["committed_date"])',
     ' - var df = d.getDate() + "/" + (d.getMonth()+1) + "/" + d.getFullYear() + " " + d.getHours() + ":" + d.getMinutes()',
     '   .commit.btn.btn-block(id="#{commit.id}", data-desc="#{commit.message}")',
-    '     span.label.label-info #{df}',
+    '     span.label.label-info.commit-date #{df}',
     '     span.commit-desc #{commit.message}',
     '     if commits.head == commit.id',
     '       span.badge.badge-success Current Version',
@@ -87,7 +87,7 @@ var generate_commit_details = jade.compile([
     'button.revert-button.btn.btn-danger.btn-large.btn-block(data-id="#{commit_id}") Jump to this version',
     '#commit-od-wrapper',
     ' h3.commit-desc-panel #{commit_message}',
-    ' h5.side-panel-header Changes',
+    ' h4.side-panel-header Changed Files',
     ' #commit-diff !{diff}'
   ].join('\n'));
 
@@ -97,7 +97,7 @@ function render_commits(){
     exec(bash, {cwd: global.current_repo_path}, function(error, stdout, stderr){
       global.current_rev  = stdout.replace(/^\s+|\s+$/g, '');
       commits['head'] = global.current_rev;
-      exec("git add . --all && git diff HEAD", {cwd: global.current_repo_path}, function(error, stdout, stderr){
+      exec("git add . --all && git diff --name-only HEAD", {cwd: global.current_repo_path}, function(error, stdout, stderr){
         commits['diff'] = stdout.replace(/\n/g, '<br />');
         commits['diff'] = commits['diff'] == "" ? "No changes" : commits['diff'];
         $("#display_area").html(format_commits({"commits" : commits}));

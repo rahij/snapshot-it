@@ -144,6 +144,7 @@ i{
   margin: 10px;
   background-color: #909090;
   color: #fff;
+  padding: 5px;
 }
 
 #unsaved-changes-button{
@@ -162,4 +163,8 @@ i{
 
 #project-button{
   margin-top: 25px;
+}
+
+span.commit-date{
+  width: 120px !important;
 }

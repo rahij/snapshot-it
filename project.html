@@ -63,7 +63,7 @@
       commit_id = $(this).attr('id');
       commit_message = $(this).attr('data-desc');
       global.selected_commit = commit_id;
-      exec("git diff "+commit_id+"^!", {cwd: global.current_repo_path}, function(error, stdout, stderr){
+      exec("git diff --name-only "+commit_id+"^!", {cwd: global.current_repo_path}, function(error, stdout, stderr){
         diff = stdout.replace(/\n/g, '<br />');
         $("#commit-details-wrapper").html(generate_commit_details({'commit_id' : commit_id, 'diff': diff, 'commit_message': commit_message}))
       });
